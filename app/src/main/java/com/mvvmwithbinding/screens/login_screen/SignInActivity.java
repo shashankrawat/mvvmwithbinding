@@ -12,6 +12,7 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
@@ -87,6 +88,9 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
         // social login requirements
         socialLoginApi.signOutGoogleAccount();
         socialLoginApi.signOutFBAccount();
+
+        showToast("This is a custom toast");
+        showSnackBar(termCondition, "This is snack bar");
     }
 
     private void setHyperLinkText() {
@@ -155,7 +159,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
         });
     }
 
-    @OnClick({R.id.back_btn, R.id.fb_login_btn, R.id.insta_login_btn, R.id.phone_btn})
+    @OnClick({R.id.back_btn, R.id.fb_login_btn, R.id.insta_login_btn})
     public void onClick(View v)
     {
         switch (v.getId())
@@ -176,9 +180,6 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
 //                socialLoginApi.signInWithGoogle();
                 break;
 
-            case R.id.phone_btn:
-                startActivity(new Intent(context, PhoneAuthenticationScreen.class));
-                break;
         }
     }
 

@@ -27,4 +27,7 @@
     <string name="code">Code</string>
     <string name="verify">Verify</string>
     <string name="send_code">Send Code</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="sign_in">Sign In</string>
 </resources>
