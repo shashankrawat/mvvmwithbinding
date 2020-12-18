@@ -9,27 +9,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.ProgressBar;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import butterknife.BindView;
+
 import com.mvvmwithbinding.screens.app_abstracts.BaseDialogFragment;
 import com.mvvmwithbinding.screens.base.listeners.AuthenticationListener;
 import com.mvvmwithdatabinding.R;
+import com.mvvmwithdatabinding.databinding.AuthDialogBinding;
 
 public class AuthenticationDialog extends BaseDialogFragment {
 
     public static final String TAG = "AuthenticationDialog";
     private Context context;
 
-    @BindView(R.id.bar)
-    ProgressBar pd;
-    @BindView(R.id.webview)
-    WebView webView;
-
     private String redirect_url = "";
     private String request_url = "";
     private AuthenticationListener listener;
+    private AuthDialogBinding binding;
+
 
 
     public static AuthenticationDialog getInstance() {
@@ -49,25 +47,25 @@ public class AuthenticationDialog extends BaseDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.auth_dialog, container, false);
+        binding = AuthDialogBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initUnbinder(view);
         context = getContext();
 
         initItems();
-        webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(request_url);
-        webView.setWebViewClient(new WebViewClient() {
+        binding.webview.getSettings().setJavaScriptEnabled(true);
+        binding.webview.loadUrl(request_url);
+        binding.webview.setWebViewClient(new WebViewClient() {
 
             @Override
             public void onPageStarted(WebView view, String url, Bitmap favicon) {
                 super.onPageStarted(view, url, favicon);
-                pd.setVisibility(View.VISIBLE);
+                binding.bar.setVisibility(View.VISIBLE);
             }
 
             @Override
@@ -82,7 +80,7 @@ public class AuthenticationDialog extends BaseDialogFragment {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                pd.setVisibility(View.GONE);
+                binding.bar.setVisibility(View.GONE);
                 if (url.contains("access_token=")) {
                     Uri uri = Uri.parse(url);
                     String access_token = uri.getEncodedFragment();

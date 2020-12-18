@@ -15,30 +15,24 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.mvvmwithbinding.screens.app_abstracts.BaseActivity;
 import com.mvvmwithdatabinding.R;
+import com.mvvmwithdatabinding.databinding.PhoneAuthenticationScreenBinding;
 
 import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 public class PhoneAuthenticationScreen extends BaseActivity
 {
     private Context context;
     private static final String TAG = "PhoneAuth";
-    @BindView(R.id.phone_number_et)
-    EditText phoneET;
-    @BindView(R.id.pass_code_et)
-    EditText codeET;
-    @BindView(R.id.authenticate_btn)
-    Button authBtn;
+
+    private PhoneAuthenticationScreenBinding binding;
+    private View rootView;
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.phone_authentication_screen);
-        ButterKnife.bind(this);
+        binding = PhoneAuthenticationScreenBinding.inflate(getLayoutInflater());
+        rootView = binding.getRoot();
+        setContentView(rootView);
 
         initViews();
     }
@@ -47,31 +41,24 @@ public class PhoneAuthenticationScreen extends BaseActivity
         context = this;
     }
 
-    @OnClick({R.id.authenticate_btn})
     public void onClick(View v)
     {
-        switch (v.getId())
-        {
-            case R.id.authenticate_btn:
-                if(authBtn.getText().toString().equalsIgnoreCase(getString(R.string.send_code)))
-                {
-                    if(!TextUtils.isEmpty(phoneET.getText().toString())) {
-                        if(phoneET.getText().length() >= 10){
-                            codeET.setVisibility(View.VISIBLE);
-                            authBtn.setText(getString(R.string.verify));
-                            codeET.requestFocus();
-                        }else {
-                            showSnackBar(authBtn, "Please enter a valid phone number");
-                        }
-                    }else {
-                        showSnackBar(authBtn, "Please enter a valid phone number");
+        if (v.getId() == R.id.authenticate_btn) {
+            if (binding.authenticateBtn.getText().toString().equalsIgnoreCase(getString(R.string.send_code))) {
+                if (!TextUtils.isEmpty(binding.phoneNumberEt.getText().toString())) {
+                    if (binding.phoneNumberEt.getText().length() >= 10) {
+                        binding.passCodeEt.setVisibility(View.VISIBLE);
+                        binding.authenticateBtn.setText(getString(R.string.verify));
+                        binding.passCodeEt.requestFocus();
+                    } else {
+                        showSnackBar(rootView, "Please enter a valid phone number");
                     }
+                } else {
+                    showSnackBar(rootView, "Please enter a valid phone number");
                 }
-                else if(authBtn.getText().toString().equalsIgnoreCase(getString(R.string.verify)))
-                {
+            } else if (binding.authenticateBtn.getText().toString().equalsIgnoreCase(getString(R.string.verify))) {
 
-                }
-                break;
+            }
         }
     }
 
@@ -100,7 +87,6 @@ public class PhoneAuthenticationScreen extends BaseActivity
         @Override
         public void onCodeSent(String s, PhoneAuthProvider.ForceResendingToken forceResendingToken) {
             super.onCodeSent(s, forceResendingToken);
-
         }
     };
 }

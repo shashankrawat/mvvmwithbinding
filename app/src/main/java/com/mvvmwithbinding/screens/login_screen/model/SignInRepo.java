@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
+import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.CallServer;
 import com.mvvmwithbinding.data.network.Resource;
 
@@ -85,6 +86,16 @@ public class SignInRepo
 
             }
         });
+        return data;
+    }
+
+    public LiveData<Resource<LoginBean>> signInUser(LoginBean obj)
+    {
+        final MutableLiveData<Resource<LoginBean>> data = new MutableLiveData<>();
+        data.setValue(Resource.loading(null));
+
+        data.setValue(Resource.success(obj));
+
         return data;
     }
 

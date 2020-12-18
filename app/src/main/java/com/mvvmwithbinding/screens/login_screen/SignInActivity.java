@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
+import android.os.Bundle;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.TextPaint;
@@ -12,35 +13,33 @@ import android.text.method.LinkMovementMethod;
 import android.text.style.URLSpan;
 import android.text.style.UnderlineSpan;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-
-import android.os.Bundle;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 import com.google.gson.JsonObject;
+import com.mvvmwithbinding.data.data_beans.ErrorBean;
+import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.Resource;
 import com.mvvmwithbinding.data.social_login.LoginViaSocialAccounts;
 import com.mvvmwithbinding.screens.app_abstracts.BaseActivity;
-import com.mvvmwithbinding.screens.base.listeners.AuthenticationListener;
 import com.mvvmwithbinding.screens.base.dialogs.AuthenticationDialog;
+import com.mvvmwithbinding.screens.base.listeners.AuthenticationListener;
 import com.mvvmwithbinding.screens.home_screen.HomeActivity;
 import com.mvvmwithbinding.screens.login_screen.view_model.SignInViewModel;
-import com.mvvmwithbinding.screens.phone_authentication_screen.PhoneAuthenticationScreen;
+import com.mvvmwithbinding.utils.AppConstants;
 import com.mvvmwithbinding.utils.CommonUtils;
 import com.mvvmwithbinding.utils.DeviceId;
 import com.mvvmwithdatabinding.R;
+import com.mvvmwithdatabinding.databinding.ActivitySignInBinding;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -59,20 +58,22 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
     private static final String TAG = "SignInActivity";
     private Context context;
 
-    @BindView(R.id.term_condition_tv)
-    TextView termCondition;
-
     private SignInViewModel model;
     private LoginViaSocialAccounts socialLoginApi;
 
+    private ActivitySignInBinding bindView;
+    private View rootView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_in);
-        ButterKnife.bind(this);
+        bindView = DataBindingUtil.setContentView(this, R.layout.activity_sign_in);
+        rootView = bindView.getRoot();
+        setContentView(rootView);
 
         initializeItems();
+
+        bindView.setViewmodel(model);
 
         subscribeViewModel();
     }
@@ -81,6 +82,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
     private void initializeItems()
     {
         context = this;
+        model = new ViewModelProvider(this).get(SignInViewModel.class);
         socialLoginApi = new LoginViaSocialAccounts(this, this);
 
         setHyperLinkText();
@@ -88,13 +90,10 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
         // social login requirements
         socialLoginApi.signOutGoogleAccount();
         socialLoginApi.signOutFBAccount();
-
-        showToast("This is a custom toast");
-        showSnackBar(termCondition, "This is snack bar");
     }
 
     private void setHyperLinkText() {
-        termCondition.setMovementMethod(LinkMovementMethod.getInstance());
+        bindView.termConditionTv.setMovementMethod(LinkMovementMethod.getInstance());
         String text = "By signing up, you agree to our <font color=\"#000000\"><a href='https://www.google.com'>terms of service</a></font><br/> and <font color=\"#000000\"><a href='https://www.google.com'>privacy policy</a></font>.";
         Spannable s = (Spannable) Html.fromHtml(text);
         for (URLSpan u : s.getSpans(0, s.length(), URLSpan.class)) {
@@ -104,12 +103,12 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
                 }
             }, s.getSpanStart(u), s.getSpanEnd(u), 0);
         }
-        termCondition.setText(s);
+        bindView.termConditionTv.setText(s);
     }
 
 
     private void subscribeViewModel() {
-        model = new ViewModelProvider(this).get(SignInViewModel.class);
+
         model.fbSignIn().observe(this, new Observer<Resource<String>>() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -129,7 +128,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
                         break;
                     case ERROR:
                         dismissProgressDialog();
-                        showSnackBar(termCondition, resource.message);
+                        showSnackBar(rootView, resource.message);
                         break;
                 }
             }
@@ -152,22 +151,66 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
                         break;
                     case ERROR:
                         dismissProgressDialog();
-                        showSnackBar(termCondition, resource.message);
+                        showSnackBar(rootView, resource.message);
+                        break;
+                }
+            }
+        });
+
+        model.observeLogin().observe(this, new Observer<Resource<LoginBean>>() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onChanged(@Nullable Resource<LoginBean> resource) {
+                if (resource == null) {
+                    return;
+                }
+
+                switch (resource.status) {
+                    case LOADING:
+                        showProgressDialog();
+                        break;
+                    case SUCCESS:
+                        dismissProgressDialog();
+                        startActivity(new Intent(context, HomeActivity.class));
+
+                        finishAffinity();
+                        break;
+                    case ERROR:
+                        dismissProgressDialog();
+                        showSnackBar(rootView, resource.message);
+                        break;
+                }
+            }
+        });
+
+
+        model.observeLoginError().observe(this, new Observer<ErrorBean>() {
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+            @Override
+            public void onChanged(@Nullable ErrorBean errorRes) {
+                if (errorRes == null) {
+                    return;
+                }
+
+                switch (errorRes.getErrorOf()) {
+                    case AppConstants.ErrorEmail:
+                        bindView.emailEt.setError(errorRes.getErrorMsg());
+                        bindView.emailEt.requestFocus();
+                        break;
+                    case AppConstants.ErrorPassword:
+                        bindView.emailEt.setError(null);
+                        bindView.passwordEt.setError(errorRes.getErrorMsg());
+                        bindView.passwordEt.requestFocus();
                         break;
                 }
             }
         });
     }
 
-    @OnClick({R.id.back_btn, R.id.fb_login_btn, R.id.insta_login_btn})
     public void onClick(View v)
     {
         switch (v.getId())
         {
-            case R.id.back_btn:
-                onBackPressed();
-                break;
-
             case R.id.fb_login_btn:
                 socialLoginApi.signInWithFacebook();
                 break;
@@ -201,7 +244,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
     {
     if (!CommonUtils.isNetworkAvailable(context)) {
         hideKeyBoard();
-        showSnackBar(termCondition, getString(R.string.no_network));
+        showSnackBar(rootView, getString(R.string.no_network));
         return;
     }
 
@@ -219,9 +262,9 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
     obj.addProperty("profile_image", args.getString("profile_pic"));
 
     if(socialType.equalsIgnoreCase("FB")) {
-        model.fbSignIn(obj);
+        model.getForm().setFBSignInData(obj);
     }else if(socialType.equalsIgnoreCase("INSTA")){
-        model.instaSignIn(obj);
+        model.getForm().setInstaSignInData(obj);
     }
     showProgressDialog();
 }

@@ -7,4 +7,14 @@
         android:layout_height="match_parent"
         tools:context="com.mvvmwithbinding.screens.home_screen.HomeActivity">
 
+    <androidx.appcompat.widget.AppCompatTextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:text="This is home screen"
+            android:textSize="@dimen/_18sdp"
+            android:textColor="@color/colorPrimary"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

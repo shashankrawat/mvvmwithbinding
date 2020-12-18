@@ -5,14 +5,11 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import com.google.android.material.snackbar.Snackbar;
 import com.mvvmwithbinding.data.app_prefs.UserSession;
 
 public abstract class BaseFragment extends Fragment
 {
-    private Unbinder unbinder;
     private BaseActivity activity;
 
     @Override
@@ -22,10 +19,6 @@ public abstract class BaseFragment extends Fragment
         activity = (BaseActivity) getActivity();
     }
 
-    protected View initUnbinder(@NonNull View v) {
-        unbinder = ButterKnife.bind(this, v);
-        return v;
-    }
 
     // get User sessions
     public UserSession getUserSession() {
@@ -33,15 +26,6 @@ public abstract class BaseFragment extends Fragment
             return activity.getUserSession();
         }
         return  null;
-    }
-
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (unbinder != null) {
-            unbinder.unbind();
-        }
     }
 
 

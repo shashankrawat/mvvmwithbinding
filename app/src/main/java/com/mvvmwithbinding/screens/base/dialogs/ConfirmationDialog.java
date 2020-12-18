@@ -6,27 +6,23 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import butterknife.BindView;
-import butterknife.OnClick;
+
 import com.mvvmwithbinding.screens.app_abstracts.BaseDialogFragment;
 import com.mvvmwithdatabinding.R;
+import com.mvvmwithdatabinding.databinding.BaseDialogBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ConfirmationDialog extends BaseDialogFragment {
+public class ConfirmationDialog extends BaseDialogFragment implements View.OnClickListener {
 
     public static final String TAG = "ConfirmationDialog";
 
-    @BindView(R.id.titleText)
-    TextView title;
-    @BindView(R.id.title_desc)
-    TextView titleDesc;
-
     private String titleText, msg;
     private ConfirmationDialogListener listener;
+    private BaseDialogBinding binding;
 
     public static ConfirmationDialog getInstance(Bundle args) {
         ConfirmationDialog dialog = new ConfirmationDialog();
@@ -48,7 +44,8 @@ public class ConfirmationDialog extends BaseDialogFragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.base_dialog, container, false);
+        binding = BaseDialogBinding.inflate(inflater, container, false);
+        return binding.getRoot();
     }
 
     public void setListener(ConfirmationDialogListener listener) {
@@ -58,14 +55,16 @@ public class ConfirmationDialog extends BaseDialogFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        initUnbinder(view);
 
         if(!TextUtils.isEmpty(titleText)) {
-            title.setText(titleText);
+            binding.titleText.setText(titleText);
         }
         if(!TextUtils.isEmpty(msg)) {
-            titleDesc.setText(msg);
+            binding.titleDesc.setText(msg);
         }
+
+        binding.yes.setOnClickListener(this);
+        binding.no.setOnClickListener(this);
 
     }
 
@@ -77,7 +76,7 @@ public class ConfirmationDialog extends BaseDialogFragment {
 
     }
 
-    @OnClick({R.id.yes, R.id.no})
+    @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.yes:
