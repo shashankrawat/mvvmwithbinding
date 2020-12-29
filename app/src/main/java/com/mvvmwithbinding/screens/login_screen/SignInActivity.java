@@ -16,7 +16,6 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.CookieManager;
 import android.webkit.CookieSyncManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -31,8 +30,8 @@ import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.Resource;
 import com.mvvmwithbinding.data.social_login.LoginViaSocialAccounts;
 import com.mvvmwithbinding.screens.app_abstracts.BaseActivity;
-import com.mvvmwithbinding.screens.base.dialogs.AuthenticationDialog;
-import com.mvvmwithbinding.screens.base.listeners.AuthenticationListener;
+import com.mvvmwithbinding.screens.app_common_components.dialogs.AuthenticationDialog;
+import com.mvvmwithbinding.screens.app_common_components.listeners.AuthenticationListener;
 import com.mvvmwithbinding.screens.home_screen.HomeActivity;
 import com.mvvmwithbinding.screens.login_screen.view_model.SignInViewModel;
 import com.mvvmwithbinding.utils.AppConstants;
@@ -184,7 +183,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
         });
 
 
-        model.observeLoginError().observe(this, new Observer<ErrorBean>() {
+        model.observeErrorData().observe(this, new Observer<ErrorBean>() {
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onChanged(@Nullable ErrorBean errorRes) {

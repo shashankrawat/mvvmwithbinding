@@ -12,34 +12,36 @@ import com.mvvmwithbinding.utils.AppConstants;
 
 public class SignInForm {
     public LoginBean loginFields = new LoginBean();
-    public ErrorBean errorFields = new ErrorBean();
+    private final ErrorBean errorFields = new ErrorBean();
     private final MutableLiveData<LoginBean> signInData = new MutableLiveData<>();
-    private final MutableLiveData<ErrorBean> signInErrorData = new MutableLiveData<>();
+    private final MutableLiveData<ErrorBean> errorData = new MutableLiveData<>();
     private final MutableLiveData<JsonObject> fbSignInData = new MutableLiveData<>();
     private final MutableLiveData<JsonObject> instaSignInData = new MutableLiveData<>();
 
     public Boolean isEmailIdValid(String email) {
         if(!TextUtils.isEmpty(email) && Patterns.EMAIL_ADDRESS.matcher(email).matches()){
-            loginFields.setEmail(email);
+            setErrorData("", 0);
             return true;
         }else {
-            errorFields.setErrorMsg("Please enter a valid Email.");
-            errorFields.setErrorOf(AppConstants.ErrorEmail);
-            signInErrorData.setValue(errorFields);
+            setErrorData("Please enter a valid Email.", AppConstants.ErrorEmail);
             return false;
         }
     }
 
     public Boolean isPasswordValid(String pwd) {
         if(!TextUtils.isEmpty(pwd) && pwd.length() >= 6){
-            loginFields.setPassword(pwd);
+            setErrorData("", 0);
             return true;
         }else {
-            errorFields.setErrorMsg("Password must be of atleast 6 letter");
-            errorFields.setErrorOf(AppConstants.ErrorPassword);
-            signInErrorData.setValue(errorFields);
+            setErrorData("Password must be of atleast 6 letter", AppConstants.ErrorPassword);
             return false;
         }
+    }
+
+    private void setErrorData(String msg, int errorType){
+        errorFields.setErrorMsg(msg);
+        errorFields.setErrorOf(errorType);
+        errorData.setValue(errorFields);
     }
 
     public void setFBSignInData(JsonObject fbData){
@@ -56,15 +58,17 @@ public class SignInForm {
         return instaSignInData;
     }
 
-    public void clickSignIn() {
-        signInData.setValue(loginFields);
+    public void onSignInClick() {
+        if(isEmailIdValid(loginFields.getEmail()) && isPasswordValid(loginFields.getPassword())) {
+            signInData.setValue(loginFields);
+        }
     }
 
-    public MutableLiveData<LoginBean> getLoginFields() {
+    public MutableLiveData<LoginBean> getLoginData() {
         return signInData;
     }
 
-    public MutableLiveData<ErrorBean> getLoginError() {
-        return signInErrorData;
+    public MutableLiveData<ErrorBean> getErrorData() {
+        return errorData;
     }
 }

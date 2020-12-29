@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.base.dialogs;
+package com.mvvmwithbinding.screens.app_common_components.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;

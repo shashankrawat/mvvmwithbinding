@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.base.listeners;
+package com.mvvmwithbinding.screens.app_common_components.listeners;
 
 
 import android.view.View;

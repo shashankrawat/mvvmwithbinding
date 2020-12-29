@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.base.dialogs;
+package com.mvvmwithbinding.screens.app_common_components.dialogs;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.mvvmwithbinding.screens.app_abstracts.BaseDialogFragment;
-import com.mvvmwithbinding.screens.base.listeners.AuthenticationListener;
+import com.mvvmwithbinding.screens.app_common_components.listeners.AuthenticationListener;
 import com.mvvmwithdatabinding.R;
 import com.mvvmwithdatabinding.databinding.AuthDialogBinding;
 

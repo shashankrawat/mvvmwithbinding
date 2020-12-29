@@ -4,18 +4,17 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.arch.core.util.Function;
-import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Transformations;
 
 import com.google.gson.JsonObject;
 import com.mvvmwithbinding.data.data_beans.ErrorBean;
 import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.Resource;
+import com.mvvmwithbinding.screens.app_abstracts.BaseViewModel;
 import com.mvvmwithbinding.screens.login_screen.model.SignInRepo;
 
-public class SignInViewModel extends AndroidViewModel
+public class SignInViewModel extends BaseViewModel
 {
     private SignInForm signInForm;
 
@@ -40,7 +39,7 @@ public class SignInViewModel extends AndroidViewModel
             }
         });
 
-        loginLD = Transformations.switchMap(signInForm.getLoginFields(), new Function<LoginBean, LiveData<Resource<LoginBean>>>() {
+        loginLD = Transformations.switchMap(signInForm.getLoginData(), new Function<LoginBean, LiveData<Resource<LoginBean>>>() {
             @Override
             public LiveData<Resource<LoginBean>> apply(LoginBean input) {
                 return SignInRepo.get().signInUser(input);
@@ -65,13 +64,8 @@ public class SignInViewModel extends AndroidViewModel
         return signInForm;
     }
 
-    public void onSignInClick(CharSequence email, CharSequence password){
-        if(signInForm.isEmailIdValid(email.toString()) && signInForm.isPasswordValid(password.toString())) {
-            signInForm.clickSignIn();
-        }
-    }
 
-    public LiveData<ErrorBean> observeLoginError() {
-        return signInForm.getLoginError();
+    public LiveData<ErrorBean> observeErrorData() {
+        return signInForm.getErrorData();
     }
 }
