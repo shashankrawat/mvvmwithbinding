@@ -8,13 +8,12 @@ import androidx.lifecycle.MutableLiveData;
 import com.google.gson.JsonObject;
 import com.mvvmwithbinding.data.data_beans.ErrorBean;
 import com.mvvmwithbinding.data.data_beans.LoginBean;
+import com.mvvmwithbinding.screens.app_abstracts.BaseForm;
 import com.mvvmwithbinding.utils.AppConstants;
 
-public class SignInForm {
+public class SignInForm extends BaseForm {
     public LoginBean loginFields = new LoginBean();
-    private final ErrorBean errorFields = new ErrorBean();
     private final MutableLiveData<LoginBean> signInData = new MutableLiveData<>();
-    private final MutableLiveData<ErrorBean> errorData = new MutableLiveData<>();
     private final MutableLiveData<JsonObject> fbSignInData = new MutableLiveData<>();
     private final MutableLiveData<JsonObject> instaSignInData = new MutableLiveData<>();
 
@@ -38,11 +37,6 @@ public class SignInForm {
         }
     }
 
-    private void setErrorData(String msg, int errorType){
-        errorFields.setErrorMsg(msg);
-        errorFields.setErrorOf(errorType);
-        errorData.setValue(errorFields);
-    }
 
     public void setFBSignInData(JsonObject fbData){
         fbSignInData.setValue(fbData);
@@ -68,7 +62,4 @@ public class SignInForm {
         return signInData;
     }
 
-    public MutableLiveData<ErrorBean> getErrorData() {
-        return errorData;
-    }
 }
