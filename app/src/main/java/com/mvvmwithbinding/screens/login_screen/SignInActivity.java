@@ -255,7 +255,7 @@ public class SignInActivity extends BaseActivity implements AuthenticationListen
     }else if(socialType.equalsIgnoreCase("INSTA")){
         obj.addProperty("insta_id", args.getString("FB_id"));
     }
-    obj.addProperty("device_id", DeviceId.getInstance().getDeviceId(context, getUserSession()));
+    obj.addProperty("device_id", DeviceId.getInstance().getDeviceId(context, model.getUserSession()));
     obj.addProperty("device_type", "A");
     obj.addProperty("device_token", "kdljalsjdskljfalksdjflka");
     obj.addProperty("profile_image", args.getString("profile_pic"));

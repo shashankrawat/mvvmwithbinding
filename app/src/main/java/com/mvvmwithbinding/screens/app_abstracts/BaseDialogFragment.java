@@ -20,13 +20,4 @@ public abstract class BaseDialogFragment extends DialogFragment
         activity = (BaseActivity) getActivity();
     }
 
-
-    // get User sessions
-    public UserSession getUserSession() {
-        if(activity != null){
-            return activity.getUserSession();
-        }
-        return  null;
-    }
-
 }

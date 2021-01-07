@@ -20,15 +20,6 @@ public abstract class BaseFragment extends Fragment
     }
 
 
-    // get User sessions
-    public UserSession getUserSession() {
-        if(activity != null){
-            return activity.getUserSession();
-        }
-        return  null;
-    }
-
-
     public void hideKeyBoard() {
         if(activity != null){
             activity.hideKeyBoard();
@@ -54,6 +45,12 @@ public abstract class BaseFragment extends Fragment
     public void dismissProgressDialog() {
         if(activity != null) {
             activity.dismissProgressDialog();
+        }
+    }
+
+    public void setFragment(int containerID, Fragment fragment, String tag, boolean addToStack) {
+        if (activity != null) {
+            activity.setFragment(containerID, fragment, tag, addToStack);
         }
     }
 }

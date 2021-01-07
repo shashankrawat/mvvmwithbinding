@@ -15,6 +15,8 @@ import android.widget.Toast;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
 import com.google.gson.FieldNamingPolicy;
@@ -30,9 +32,6 @@ import static com.mvvmwithbinding.utils.PreferencesUtil.PREFERENCE_NAME;
 
 public abstract class BaseActivity extends AppCompatActivity
 {
-    private UserSession mUserSession;
-    private Gson mGson;
-    private PreferencesUtil mPreferencesUtil;
     private ProgressDialog mBar;
     private ProgressDialogUtils progressUtil;
 
@@ -113,32 +112,20 @@ public abstract class BaseActivity extends AppCompatActivity
         mBar = null;
     }
 
-    // get GSON Object
-    public Gson getGsonBuilder() {
-        if (mGson == null)
-            mGson = new GsonBuilder()
-                    .enableComplexMapKeySerialization()
-                    .setFieldNamingPolicy(FieldNamingPolicy.UPPER_CAMEL_CASE)
-                    .setPrettyPrinting()
-                    .setVersion(1.0)
-                    .setLenient()
-                    .create();
-        return mGson;
-    }
-
-    // get shared preference
-    private PreferencesUtil getPreferencesUtil() {
-        if (mPreferencesUtil == null)
-            mPreferencesUtil = new PreferencesUtil(getSharedPreferences(PREFERENCE_NAME, MODE_PRIVATE));
-        return mPreferencesUtil;
-    }
-
-
-    // get User sessions
-    public UserSession getUserSession() {
-        if (mUserSession == null) {
-            mUserSession = UserSessionImpl.getInstance(getPreferencesUtil(), getGsonBuilder());
+    public void setFragment(int containerId, Fragment fragment, String tag, boolean addToStack)
+    {
+        if(fragment == null){
+            return;
         }
-        return mUserSession;
+
+        try{
+            FragmentTransaction fragTransaction = getSupportFragmentManager().beginTransaction();
+            fragTransaction.add(containerId, fragment, tag);
+            if (addToStack) fragTransaction.addToBackStack(tag);
+            fragTransaction.commit();
+        }catch (Exception e){
+            Log.e(tag, ""+e.toString());
+        }
     }
+
 }
