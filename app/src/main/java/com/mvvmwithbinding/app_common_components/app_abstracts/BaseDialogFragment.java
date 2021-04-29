@@ -1,12 +1,10 @@
-package com.mvvmwithbinding.screens.app_abstracts;
+package com.mvvmwithbinding.app_common_components.app_abstracts;
 
 import android.os.Bundle;
 import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
-
-import com.mvvmwithbinding.data.app_prefs.UserSession;
 
 
 public abstract class BaseDialogFragment extends DialogFragment

@@ -1,7 +1,9 @@
-package com.mvvmwithbinding.screens.app_abstracts;
+package com.mvvmwithbinding.app_common_components.app_abstracts;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -13,22 +15,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.snackbar.Snackbar;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.mvvmwithbinding.data.app_prefs.UserSession;
-import com.mvvmwithbinding.data.app_prefs.UserSessionImpl;
-import com.mvvmwithbinding.utils.PreferencesUtil;
 import com.mvvmwithbinding.utils.ProgressDialogUtils;
 import com.mvvmwithdatabinding.R;
-
-import static com.mvvmwithbinding.utils.PreferencesUtil.PREFERENCE_NAME;
 
 public abstract class BaseActivity extends AppCompatActivity
 {
@@ -126,6 +121,16 @@ public abstract class BaseActivity extends AppCompatActivity
         }catch (Exception e){
             Log.e(tag, ""+e.toString());
         }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    public boolean checkPermissions(String[] permissions) {
+        for(String permission : permissions){
+            if(checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED){
+                return false;
+            }
+        }
+        return true;
     }
 
 }

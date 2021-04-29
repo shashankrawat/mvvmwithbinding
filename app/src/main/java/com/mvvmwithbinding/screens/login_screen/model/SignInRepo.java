@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseRepo;
 import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.CallServer;
 import com.mvvmwithbinding.data.network.Resource;
@@ -13,7 +14,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SignInRepo
+public class SignInRepo extends BaseRepo
 {
 
     public static SignInRepo get() {

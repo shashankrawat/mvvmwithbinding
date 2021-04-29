@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.app_common_components.dialogs;
+package com.mvvmwithbinding.app_common_components.dialogs;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -10,22 +10,23 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.mvvmwithbinding.screens.app_abstracts.BaseDialogFragment;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseDialogFragment;
+import com.mvvmwithbinding.app_common_components.listeners.ConfirmationDialogListener;
+import com.mvvmwithbinding.utils.AppConstants;
 import com.mvvmwithdatabinding.R;
-import com.mvvmwithdatabinding.databinding.BaseDialogBinding;
+import com.mvvmwithdatabinding.databinding.DialogInfoViewBinding;
 
 import org.jetbrains.annotations.NotNull;
 
-public class ConfirmationDialog extends BaseDialogFragment implements View.OnClickListener {
-
-    public static final String TAG = "ConfirmationDialog";
+public class InfoDialog extends BaseDialogFragment implements View.OnClickListener {
+    public static final String TAG = "InfoDialog";
 
     private String titleText, msg;
     private ConfirmationDialogListener listener;
-    private BaseDialogBinding binding;
+    private DialogInfoViewBinding binding;
 
-    public static ConfirmationDialog getInstance(Bundle args) {
-        ConfirmationDialog dialog = new ConfirmationDialog();
+    public static InfoDialog getInstance(Bundle args) {
+        InfoDialog dialog = new InfoDialog();
         dialog.setArguments(args);
         return dialog;
     }
@@ -36,15 +37,15 @@ public class ConfirmationDialog extends BaseDialogFragment implements View.OnCli
 
         Bundle args = getArguments();
         if(args != null){
-            titleText = args.getString("TITLE");
-            msg = args.getString("MESSAGE");
+            titleText = args.getString(AppConstants.KEY_POPUP_TITLE);
+            msg = args.getString(AppConstants.KEY_POPUP_MSG);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = BaseDialogBinding.inflate(inflater, container, false);
+        binding = DialogInfoViewBinding.inflate(inflater, container, false);
         return binding.getRoot();
     }
 
@@ -63,8 +64,7 @@ public class ConfirmationDialog extends BaseDialogFragment implements View.OnCli
             binding.titleDesc.setText(msg);
         }
 
-        binding.yes.setOnClickListener(this);
-        binding.no.setOnClickListener(this);
+        binding.okBtn.setOnClickListener(this);
 
     }
 
@@ -78,21 +78,11 @@ public class ConfirmationDialog extends BaseDialogFragment implements View.OnCli
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.yes:
-                if (listener != null) {
-                    listener.onOkClicked();
-                }
-                dismiss();
-                break;
-
-            case R.id.no:
-                dismiss();
-                break;
+        if (v.getId() == R.id.ok_btn) {
+            if (listener != null) {
+                listener.onOkClicked();
+            }
+            dismiss();
         }
-    }
-
-    public interface ConfirmationDialogListener {
-        void onOkClicked();
     }
 }

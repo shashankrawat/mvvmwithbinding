@@ -11,7 +11,7 @@ import com.google.gson.JsonObject;
 import com.mvvmwithbinding.data.data_beans.ErrorBean;
 import com.mvvmwithbinding.data.data_beans.LoginBean;
 import com.mvvmwithbinding.data.network.Resource;
-import com.mvvmwithbinding.screens.app_abstracts.BaseViewModel;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseViewModel;
 import com.mvvmwithbinding.screens.login_screen.model.SignInRepo;
 
 public class SignInViewModel extends BaseViewModel

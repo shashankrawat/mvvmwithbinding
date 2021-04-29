@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.app_common_components.binding_classes;
+package com.mvvmwithbinding.app_common_components.binding_classes;
 
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.AppCompatTextView;
 import androidx.databinding.BindingAdapter;
 
-import com.mvvmwithbinding.screens.app_common_components.listeners.TextChangeListener;
+import com.mvvmwithbinding.app_common_components.listeners.TextChangeListener;
 
 public class BindingAdapters {
 

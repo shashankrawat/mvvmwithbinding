@@ -5,15 +5,13 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 
 import androidx.annotation.Nullable;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthProvider;
-import com.mvvmwithbinding.screens.app_abstracts.BaseActivity;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseActivity;
 import com.mvvmwithdatabinding.R;
 import com.mvvmwithdatabinding.databinding.PhoneAuthenticationScreenBinding;
 

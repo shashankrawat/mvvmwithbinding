@@ -31,5 +31,11 @@
     <string name="password">Password</string>
     <string name="sign_in">Sign In</string>
     <string name="star">\u2605</string>
+    <string name="year">Year</string>
+    <string name="cancel">Cancel</string>
+    <string name="ok">OK</string>
+    <string name="choose_from">Choose From</string>
+    <string name="take_pic_using_camera">Use Camera</string>
+    <string name="choose_from_gallery">Choose from gallery</string>
 
 </resources>

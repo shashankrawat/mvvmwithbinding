@@ -6,9 +6,8 @@ import android.util.Patterns;
 import androidx.lifecycle.MutableLiveData;
 
 import com.google.gson.JsonObject;
-import com.mvvmwithbinding.data.data_beans.ErrorBean;
 import com.mvvmwithbinding.data.data_beans.LoginBean;
-import com.mvvmwithbinding.screens.app_abstracts.BaseForm;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseForm;
 import com.mvvmwithbinding.utils.AppConstants;
 
 public class SignInForm extends BaseForm {

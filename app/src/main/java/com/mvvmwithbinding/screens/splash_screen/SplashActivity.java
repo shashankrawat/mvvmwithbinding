@@ -10,7 +10,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.WindowManager;
 import android.os.Bundle;
-import com.mvvmwithbinding.screens.app_abstracts.BaseActivity;
+import com.mvvmwithbinding.app_common_components.app_abstracts.BaseActivity;
 import com.mvvmwithbinding.screens.login_screen.SignInActivity;
 import com.mvvmwithdatabinding.R;
 

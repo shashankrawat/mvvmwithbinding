@@ -1,4 +1,4 @@
-package com.mvvmwithbinding.screens.app_common_components.adapters;
+package com.mvvmwithbinding.app_common_components.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,19 +9,21 @@ import androidx.appcompat.widget.AppCompatTextView;
 import androidx.recyclerview.widget.RecyclerView;
 
 
-import com.mvvmwithbinding.screens.app_common_components.listeners.OnItemClickedListener;
+import com.mvvmwithbinding.app_common_components.listeners.DDItemListener;
 import com.mvvmwithdatabinding.R;
 
 import java.util.List;
 
-public class DropdownAdapter extends RecyclerView.Adapter<DropdownAdapter.ViewHolder>
-{
-    private final List<String> dataList;
-    private final OnItemClickedListener<String> listener;
+public class CustomDropdownAdapter<T> extends RecyclerView.Adapter<CustomDropdownAdapter<T>.ViewHolder> {
 
-    public DropdownAdapter(List<String> dataList, OnItemClickedListener<String> listener){
+    private final List<T> dataList;
+    private final DDItemListener<T> listener;
+    private final int ddType;
+
+    public CustomDropdownAdapter(List<T> dataList, DDItemListener<T> listener, int ddType){
         this.dataList = dataList;
         this.listener = listener;
+        this.ddType = ddType;
     }
 
     @NonNull
@@ -49,14 +51,21 @@ public class DropdownAdapter extends RecyclerView.Adapter<DropdownAdapter.ViewHo
             itemView.setOnClickListener(this);
         }
 
-        public void setData(String item){
-            ddItemName.setText(item);
+        public void setData(T item){
+            String ddText = "";
+            /*if(ddType == AppConstants.DD_DISTRICT_TYPE){
+                DistrictsBean distItem = (DistrictsBean) item;
+                ddText = distItem.getDistName();
+            }*/
+
+            ddItemName.setText(ddText);
+
         }
 
         @Override
         public void onClick(View v) {
             if(listener != null){
-                listener.onItemClicked(v, dataList.get(getAdapterPosition()), getAdapterPosition());
+                listener.onItemClicked(dataList.get(getAdapterPosition()), getAdapterPosition(), ddType);
             }
         }
     }
